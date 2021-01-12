@@ -1,4 +1,4 @@
-package com.xexi.conecta4login
+package com.xexi.conecta4Login
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

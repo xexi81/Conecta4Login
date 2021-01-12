@@ -1,4 +1,4 @@
-package com.xexi.conecta4login
+package com.xexi.conecta4Login
 
 import org.junit.Test
 

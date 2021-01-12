@@ -41,6 +41,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564975633095:android:4d1fab64eedd7a8c9b74e2",
+        "android_client_info": {
+          "package_name": "com.xexi.conecta4login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564975633095-l0m68r216c9nsl2i9dsp5b1b161nn80c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xexi.conecta4login",
+            "certificate_hash": "c62e98c5642d2e093a39be507373ea461cccb086"
+          }
+        },
+        {
+          "client_id": "564975633095-3tk3orf3fb3m0fgk224qj43u8barv0a4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOSQqLzZJqRcS_MRqNJek9JTKkpVG3eG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564975633095-3tk3orf3fb3m0fgk224qj43u8barv0a4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
