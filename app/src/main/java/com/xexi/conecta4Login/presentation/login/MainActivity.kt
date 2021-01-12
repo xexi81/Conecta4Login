@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.xexi.conecta4Login.R
 import com.xexi.conecta4Login.base.Resource
 import com.xexi.conecta4Login.data.login.RepoImplGetUserLogged
-import com.xexi.conecta4Login.data.login.User
 import com.xexi.conecta4Login.domain.login.GetUserLoginImpl
 import com.xexi.conecta4Login.presentation.login.viewModel.MainViewModel
 import com.xexi.conecta4Login.presentation.login.viewModel.MainViewModelFactory
@@ -20,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         observeData()
     }
@@ -36,13 +34,10 @@ class MainActivity : AppCompatActivity() {
                     Log.d("Sergio", "Estamos cargando")
                 }
                 is Resource.Success -> {
-                    Log.d("Sergio", "Hemos encontrado user")
-                    val user: User = User("", "", "")
-                    Log.d("Sergio", "tas por aki?")
+                    val user = it.data
                     if (user.email == "") {
                         Log.d("Sergio", "el user es null")
                     } else {
-                        Log.d("Sergio", "hemos encontrado user??")
                         Log.d("Sergio", user.email)
                         Log.d("Sergio", user.name)
                         Log.d("Sergio", user.uid)

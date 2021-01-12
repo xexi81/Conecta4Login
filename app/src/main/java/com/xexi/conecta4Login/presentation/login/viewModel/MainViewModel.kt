@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.xexi.conecta4Login.base.Resource
+import com.xexi.conecta4Login.data.login.User
 import com.xexi.conecta4Login.domain.login.IGetUserLogin
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
@@ -15,9 +16,9 @@ class MainViewModel(useCase:IGetUserLogin): ViewModel() {
         emit(Resource.Loading())
 
         try {
-            val user = useCase.getUserLogged()
+            val user: Resource<User> = useCase.getUserLogged()
             // cuando tengo datos para enviar a la activity
-            emit(Resource.Success(user))
+            emit(user)
         } catch (e: Exception) {
             // cuando algo ha fallado
             emit(Resource.Failure(e))
