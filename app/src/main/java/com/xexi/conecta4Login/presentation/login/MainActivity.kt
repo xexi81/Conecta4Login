@@ -1,10 +1,14 @@
 package com.xexi.conecta4Login.presentation.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.xexi.conecta4Login.R
 import com.xexi.conecta4Login.base.Resource
 import com.xexi.conecta4Login.base.checkEmpty
@@ -17,6 +21,7 @@ import com.xexi.conecta4Login.presentation.login.viewModel.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private val mainViewModel by lazy { ViewModelProvider(this, MainViewModelFactory(GetUserLoginImpl(RepoImplGetUserLogged()))).get(MainViewModel::class.java) }
+    private val GOOGLE_SIGN_IN = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         // Register with firebase
         binding.btnRegister.setOnClickListener {
             createFirebaseUser(binding)
+        }
+
+        // Send password by email
+        binding.txtRememberPassword.setOnClickListener {
+            rememberPassword(binding)
         }
 
         // Login with Google
@@ -99,17 +109,50 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun loginGoogleUser(binding: ActivityMainBinding) {
-        mainViewModel.logGoogleUser(binding.txtUsername.text.toString(), binding.txtPassword.text.toString()).observe(this, {
-            when (it) {
-                is Resource.Success -> {
-                    Log.d("Sergio", "Success: ${it.data}")
-                }
-                is Resource.Failure -> {
-                    Log.w("Sergio", it.exception.message.toString())
-                }
+    private fun rememberPassword(binding: ActivityMainBinding) {
+        if (binding.txtUsername.checkEmpty()) {
+            this.toast("Email is empty")
+        }
+
+        mainViewModel.rememberUser(binding.txtUsername.text.toString()).observe(this, {
+            if (it is Resource.Success) {
+                this.toast("Email sent")
+            } else {
+                this.toast("Something went wrong!")
             }
         })
+    }
+
+
+    private fun loginGoogleUser(binding: ActivityMainBinding) {
+        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+
+        val googleClient = GoogleSignIn.getClient(this, googleConf)
+        ActivityCompat.startActivityForResult(this, googleClient.signInIntent, GOOGLE_SIGN_IN, null)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == GOOGLE_SIGN_IN) {
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            if (result!!.isSuccess) {
+                val account = result.signInAccount
+                mainViewModel.loginWithGoogle(account!!).observe(this, {
+                    if (it is Resource.Success) {
+                        //TODO("StartActivity to another window")
+                    } else {
+                        this.toast("Something went wrong!")
+                    }
+                })
+            } else {
+                this.toast("Something went wrong!")
+            }
+        }
     }
 
 }
