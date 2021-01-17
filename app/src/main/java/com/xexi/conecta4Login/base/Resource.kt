@@ -1,6 +1,5 @@
 package com.xexi.conecta4Login.base
 
-import com.xexi.conecta4Login.data.login.User
 
 // clase sellada
 sealed class Resource<out T> {
