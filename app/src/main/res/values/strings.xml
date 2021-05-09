@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">Conecta4Login</string>
     <string name="password_remember">I don\'t remember my password</string>
+    <string name="logout">LogOut</string>
+    <string name="title_activity_user_menu">UserMenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_exit">Log out</string>
+
+    <!-- settings Fragment in UserMenuActivity !-->
+    <string name="userName">Choose your username</string>
+    <string name="notifications">Notifications</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="save">Save</string>
+
+
+    <!-- settings Fragment in HomeFragment !-->
+    <string name="looking">Looking for a player</string>
+    <string name="turn">Turn</string>
+
+    <!-- settings Game Dialog !-->
+    <string name="turnDialog">Your turn</string>
 </resources>

@@ -2,7 +2,6 @@ package com.xexi.conecta4Login.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -12,12 +11,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.xexi.conecta4Login.R
 import com.xexi.conecta4Login.base.Resource
 import com.xexi.conecta4Login.base.checkEmpty
+import com.xexi.conecta4Login.base.startActivity
 import com.xexi.conecta4Login.base.toast
 import com.xexi.conecta4Login.data.login.RepoImplGetUserLogged
 import com.xexi.conecta4Login.databinding.ActivityMainBinding
 import com.xexi.conecta4Login.domain.login.GetUserLoginImpl
 import com.xexi.conecta4Login.presentation.login.viewModel.MainViewModel
 import com.xexi.conecta4Login.presentation.login.viewModel.MainViewModelFactory
+import com.xexi.conecta4Login.presentation.userMenu.UserMenuActivity
 
 class MainActivity : AppCompatActivity() {
     private val mainViewModel by lazy { ViewModelProvider(this, MainViewModelFactory(GetUserLoginImpl(RepoImplGetUserLogged()))).get(MainViewModel::class.java) }
@@ -55,17 +56,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         getFirebaseUser()
     }
 
 
     private fun getFirebaseUser() {
-        mainViewModel.getCurrentUser.observe(this, {
-            if (it is Resource.Success && it.data.email.isNotEmpty()) {
-                //TODO("StartActivity to another window")
-            } else {
-                this.toast("Wrong email or password")
+        mainViewModel.user.observe(this, {
+            if (it.email.isNotEmpty()) {
+                startUserMenu()
             }
         })
     }
@@ -81,10 +79,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.regUser(binding.txtUsername.text.toString(), binding.txtPassword.text.toString()).observe(this, {
-            if (it is Resource.Success) {
-                //TODO("StartActivity to another window")
+            if (it is Resource.Success && it.data) {
+                this.toast("User registered successfully")
             } else {
-                this.toast("Something went wrong!")
+                if (it is Resource.Success && !it.data) {
+                    this.toast("Register user -- Something went wrong!")
+                }
             }
         })
     }
@@ -100,10 +100,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.logUser(binding.txtUsername.text.toString(), binding.txtPassword.text.toString()).observe(this, {
-            if (it is Resource.Success) {
-                //TODO("StartActivity to another window")
+            if (it is Resource.Success && it.data) {
+                startUserMenu()
             } else {
-                this.toast("Something went wrong!")
+                if (it is Resource.Success && !it.data) {
+                    this.toast("Login user -- Something went wrong!")
+                }
             }
         })
     }
@@ -115,10 +117,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.rememberUser(binding.txtUsername.text.toString()).observe(this, {
-            if (it is Resource.Success) {
+            if (it is Resource.Success && it.data) {
                 this.toast("Email sent")
             } else {
-                this.toast("Something went wrong!")
+                if (it is Resource.Success && !it.data) {
+                    this.toast("Reset user -- Something went wrong!")
+                }
             }
         })
     }
@@ -143,16 +147,18 @@ class MainActivity : AppCompatActivity() {
             if (result!!.isSuccess) {
                 val account = result.signInAccount
                 mainViewModel.loginWithGoogle(account!!).observe(this, {
-                    if (it is Resource.Success) {
-                        //TODO("StartActivity to another window")
-                    } else {
-                        this.toast("Something went wrong!")
+                    if (it is Resource.Success && it.data) {
+                        startUserMenu()
                     }
                 })
             } else {
-                this.toast("Something went wrong!")
+                this.toast("Google login -- Something went wrong!")
             }
         }
+    }
+
+    private fun startUserMenu() {
+        this.startActivity(UserMenuActivity::class.java)
     }
 
 }

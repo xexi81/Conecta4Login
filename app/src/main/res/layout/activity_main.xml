@@ -8,7 +8,7 @@
     tools:context=".presentation.login.MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivUserPhoto"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/ivUserPhoto" />
 
     <EditText
         android:id="@+id/txtPassword"

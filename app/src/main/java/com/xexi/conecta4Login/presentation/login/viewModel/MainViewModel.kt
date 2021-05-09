@@ -1,13 +1,13 @@
 package com.xexi.conecta4Login.presentation.login.viewModel
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.xexi.conecta4Login.base.Resource
+import com.xexi.conecta4Login.base.obtenerUsuario
 import com.xexi.conecta4Login.data.login.User
 import com.xexi.conecta4Login.domain.login.IGetUserLogin
 import kotlinx.coroutines.Dispatchers
@@ -15,20 +15,10 @@ import java.lang.Exception
 
 class MainViewModel(useCase:IGetUserLogin): ViewModel() {
 
-    val getCurrentUser = liveData(Dispatchers.IO) {
-        // mientras no recibo nada, estoy en loading
-        emit(Resource.Loading())
-
-        try {
-            val user: Resource<User> = useCase.getUserLogged()
-            // cuando tengo datos para enviar a la activity
-            emit(user)
-        } catch (e: Exception) {
-            // cuando algo ha fallado
-            emit(Resource.Failure(e))
-            Log.e("ERROR", e.message.toString())
-        }
+    private val _user = MutableLiveData<User>().apply {
+        value = obtenerUsuario()
     }
+    val user: LiveData<User> = _user
 
     val regUser = fun(email: String, password: String): LiveData<Resource<Boolean>> {
         val registeredUser = liveData(Dispatchers.IO) {
